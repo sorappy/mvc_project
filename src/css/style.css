@@ -1,0 +1,92 @@
+body {
+  background: #e3e3e3;
+  color: #444;
+}
+main {
+  width: 80%;
+  margin: 0px auto 0px;
+}
+header {
+  width: 100%;
+  padding: 10px;
+  background: #444;
+  color: #fafafa;
+}
+footer {
+  width: 100%;
+  padding: 10px;
+  background: #444;
+  color: #fafafa;
+  text-align: center;
+}
+ol li {
+  margin: 20px 0;
+}
+footer a {
+  color: #fafafa;
+}
+code {
+  padding: 7px;
+  background: rgba(198,198,198, 0.7);
+}
+form {
+  display: block;
+  width: 60%;
+  margin: 30px auto 30px;
+  padding: 32px;
+  background: #fff;
+}
+form label {
+  display: block;
+  font-size: 1.3em;
+  margin-bottom: 10px;
+}
+form .submit {
+  text-align: center;
+}
+form .submit input[type="submit"] {
+  border: none;
+  padding: 15px;
+  width: 100px;
+  background: #ddd;
+}
+input[type="submit"]:hover {
+  cursor: pointer;
+  color: #fafafa;
+  background: #444 !important;
+}
+form textarea {
+  display: block;
+  width: 70%;
+  height: 150px;
+  margin-bottom: 20px;
+}
+.author {
+  text-align: center;
+}
+.divider {
+  display: flex;
+  align-items: center;
+}
+.divider::before,
+.divider::after {
+  content: '';
+  height: 1px;
+  background-color: #333;
+  flex-grow: 1;
+}
+.divider_message {
+  display: inline-block;
+  padding: 0 15px;
+}
+.messages {
+  margin: 15px 0;
+}
+.messages .message {
+  padding: 15px;
+  background: #444;
+  color: #fafafa;
+}
+.messages .message .user_name {
+  padding-right: 15px;
+}

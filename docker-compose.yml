@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  app:
+    build: ./docker/apache
+    depends_on:
+      - db
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    ports:
+      - 18080:80
+  db:
+    build: ./docker/db
+    volumes:
+      - ./docker/db/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_test
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+      TZ: 'Asia/Tokyo'
+    ports:
+      - 13306:3306
