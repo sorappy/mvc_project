@@ -1,16 +1,16 @@
-version: '3'
+version: "3"
 
 services:
-  app:
+  apache:
     build: ./docker/apache
     depends_on:
-      - db
+      - mysql
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
     ports:
-      - 18080:80
-  db:
+      - 80:80
+  mysql:
     build: ./docker/db
     volumes:
       - ./docker/db/data:/var/lib/mysql
@@ -19,6 +19,17 @@ services:
       MYSQL_DATABASE: db_test
       MYSQL_USER: docker
       MYSQL_PASSWORD: docker
-      TZ: 'Asia/Tokyo'
+      TZ: "Asia/Tokyo"
     ports:
-      - 13306:3306
+      - 3306:3306
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql
+    links:
+      - mysql
+    ports:
+      - 8000:80
+    volumes:
+      - /sessions
