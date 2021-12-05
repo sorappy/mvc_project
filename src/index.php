@@ -16,10 +16,33 @@ $message_array = array();
 $success_message = null;
 $error_message = array();
 $clean = array();
+$pdo = null;
+$stmt = null;
+$res = null;
+$option = null;
+
+// データベースに接続
+try {
+    $option = array(
+		PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+		PDO::MYSQL_ATTR_MULTI_STATEMENTS => false,
+	);
+    $pdo = new PDO('mysql:charset=UTF8;dbname=board;host=mysql', 'root', 'root',$option);
+
+
+} catch(PDOException $e) {
+
+    // 接続エラーのときエラー内容を取得する
+    $error_message[] = $e->getMessage();
+}
 
 if( !empty($_POST['btn_submit']) ) {
  //   var_dump($_POST);
  //   echo "<br>";
+
+    // 空白除去
+    $view_name = preg_replace( '/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', $_POST['view_name']);
+    $message = preg_replace( '/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', $_POST['message']);
 
  	// 表示名の入力チェック
      if( empty($_POST['view_name']) ) {
@@ -39,6 +62,7 @@ if( !empty($_POST['btn_submit']) ) {
 
     if( empty($error_message) ) {
 
+        /* コメントアウト
         if( $file_handle = fopen( FILENAME, "a") ) {
         
             // 書き込み日時を取得
@@ -55,8 +79,49 @@ if( !empty($_POST['btn_submit']) ) {
 
             $success_message = 'メッセージを書き込みました。';
         }
+         */
+
+        // 書き込み日時を取得
+        $current_date = date("Y-m-d H:i:s");
+
+        // トランザクション開始
+		$pdo->beginTransaction();
+
+		try {
+
+            // SQL作成
+            $stmt = $pdo->prepare("INSERT INTO message (view_name, message, post_date) VALUES ( :view_name, :message, :current_date)");
+
+            // 値をセット
+            $stmt->bindParam( ':view_name', $clean['view_name'], PDO::PARAM_STR);
+            $stmt->bindParam( ':message', $clean['message'], PDO::PARAM_STR);
+            $stmt->bindParam( ':current_date', $current_date, PDO::PARAM_STR);
+
+            // SQLクエリの実行
+            $res = $stmt->execute();
+
+            // コミット
+            $res = $pdo->commit();
+
+        } catch(Exception $e) {
+
+            // エラーが発生した時はロールバック
+            $pdo->rollBack();
+        }
+
+        if( $res ) {
+            $success_message = 'メッセージを書き込みました。';
+        } else {
+            $error_message[] = '書き込みに失敗しました。';
+        }
+
+        // プリペアドステートメントを削除
+        $stmt = null;
     }
 }
+
+// データベースの接続を閉じる
+$pdo = null;
 
 //ファイルの読み込み
 if( $file_handle = fopen( FILENAME,'r') ) {
