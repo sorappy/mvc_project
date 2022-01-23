@@ -20,6 +20,8 @@ $stmt = null;
 $res = null;
 $option = null;
 
+session_start();
+
 // データベースに接続
 try {
     $option = array(
@@ -47,6 +49,7 @@ if( !empty($_POST['btn_submit']) ) {
 	} else {
 		$clean['view_name'] = htmlspecialchars( $_POST['view_name'], ENT_QUOTES, 'UTF-8');
         $clean['view_name'] = preg_replace( '/\\r\\n|\\n|\\r/', '', $clean['view_name']);
+        $_SESSION['view_name'] = $view_name;
 	}
 
 	// メッセージの入力チェック
@@ -107,7 +110,7 @@ if( empty($error_message) ) {
 
 // データベースの接続を閉じる
 $pdo = null;
-
+//echo phpinfo();
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -131,7 +134,8 @@ $pdo = null;
 <form method="post">
 	<div>
 		<label for="view_name">表示名</label>
-		<input id="view_name" type="text" name="view_name" value="" required>
+		<input id="view_name" type="text" name="view_name" 
+        value="<?php if( !empty($_SESSION['view_name']) ){ echo htmlspecialchars( $_SESSION['view_name'], ENT_QUOTES, 'UTF-8'); } ?>" required>
 	</div>
 	<div>
 		<label for="message">ひと言メッセージ</label>
