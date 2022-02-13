@@ -138,6 +138,7 @@ label {
 }
 
 input[type="text"],
+input[type="password"],
 textarea {
 	margin-bottom: 20px;
 	padding: 10px;
@@ -147,7 +148,8 @@ textarea {
     background: #fff;
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="password"] {
 	width: 200px;
 }
 textarea {
