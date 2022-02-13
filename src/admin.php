@@ -81,6 +81,9 @@ $pdo = null;
 <?php endif; ?>
 <section>
 <?php if( !empty($_SESSION['admin_login']) && $_SESSION['admin_login'] === true ): ?>
+<form method="get" action="./download.php">
+    <input type="submit" name="btn_download" value="ダウンロード">
+</form>
 <?php if( !empty($message_array) ): ?>
 <?php foreach( $message_array as $value ): ?>
 <article>
