@@ -55,7 +55,7 @@ if( !empty($_POST['btn_submit']) ) {
 if( empty($error_message) ) {
 
 	// メッセージのデータを取得する
-	$sql = "SELECT view_name,message,post_date FROM message ORDER BY post_date DESC";
+	$sql = "SELECT * FROM message ORDER BY post_date DESC";
 	$message_array = $pdo->query($sql);
 }
 
