@@ -82,6 +82,11 @@ $pdo = null;
 <section>
 <?php if( !empty($_SESSION['admin_login']) && $_SESSION['admin_login'] === true ): ?>
 <form method="get" action="./download.php">
+    <select name="limit">
+        <option value="">全て</option>
+        <option value="10">10件</option>
+        <option value="30">30件</option>
+    </select>
     <input type="submit" name="btn_download" value="ダウンロード">
 </form>
 <?php if( !empty($message_array) ): ?>

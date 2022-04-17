@@ -22,8 +22,19 @@ $pdo = null;
 $stmt = null;
 $res = null;
 $option = null;
+$limit = null;
+
 
 session_start();
+
+//取得件数
+if(!empty($_GET['limit'])){
+    if($_GET['limit'] === "10"){
+        $limit = 10;
+    } elseif ( $_GET['limit'] === "30" ){
+        $limit = 30;
+    }
+}
 
 if( !empty($_SESSION['admin_login']) && $_SESSION['admin_login'] === true ) {
     //データベースに接続
@@ -35,9 +46,23 @@ if( !empty($_SESSION['admin_login']) && $_SESSION['admin_login'] === true ) {
         $pdo = new PDO('mysql:charset=UTF8;dbname='.DB_NAME.';host='.DB_HOST , DB_USER, DB_PASS, $option);
 
         //メッセージのデータを取得する
-        $sql = "SELECT * FROM message ORDER BY post_date ASC";
-        $message_array = $pdo->query($sql);
+//        $sql = "SELECT * FROM message ORDER BY post_date ASC";
+//        $message_array = $pdo->query($sql);
+        if( !empty($limit) ) {
+            //SQL作成
+            $stmt = $pdo->prepare("SELECT * FROM message ORDER BY post_date ASC LIMIT :limit");
+            //値をセット
+            $stmt->bindValue( ':limit', $limit, PDO::PARAM_INT );
+        } else {
+            $stmt = $pdo->prepare("SELECT * FROM message ORDER BY post_date ASC");
+        }
+
+        //SQLクエリの実行
+        $stmt->execute();
+        $message_array = $stmt->fetchAll();
+
         // データベースの接続を閉じる
+        $stmt = null;
         $pdo = null;
     } catch(PDOException $e) {
         //管理者ページへリダイレクト
